@@ -1,0 +1,159 @@
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/700.css";
+@import "tailwindcss";
+
+/* ── theme tokens ─────────────────────────────────────── */
+/* Ink on paper, one colour.
+   Surfaces keep their paper warmth but at very low chroma; the text ramp is
+   graphite carrying a whisper of the accent's hue, so it sits with the blue
+   instead of opposing it. The accent is the only saturated hue on the page,
+   and it is the same hue in both themes. Steps are even in OKLCH lightness
+   and every one clears its contrast target — see the table in the commit. */
+:root {
+  --bg:            #fbf9f5;
+  --surface:       #f1eee9;
+  --surface-title: #ede9e3;
+  --surface-hover: #efece6;
+  --border:        #dfdbd4;
+  --border-alt:    #dbd6cf;
+  --border-sub:    #d6d1c9;
+  --border-hover:  #c5bfb7;
+  --border-foot:   #e9e6e0;
+  --nav-bg:        rgba(251, 249, 245, 0.95);
+  /* text scale: t1 = most prominent → t9 = nearly invisible */
+  --t1: #161921;
+  --t2: #272a32;
+  --t3: #363942;
+  --t4: #444850;
+  --t5: #52555d;
+  --t6: #60636b;
+  --t7: #6e7179;
+  --t8: #898c92;
+  --t9: #b5b7bd;
+  --accent: #283fb9;
+  /* chips read as sitting above the card: white on paper here, a step
+     lighter than the card surface in the dark theme */
+  --chip-bg: #ffffff;
+  /* window-control dots: three intensities of the one hue */
+  --dot-1: #304cc0;
+  --dot-2: #5f7dd7;
+  --dot-3: #91a9e8;
+}
+
+html.dark {
+  --bg:            #0e0c09;
+  --surface:       #151310;
+  --surface-title: #11100d;
+  --surface-hover: #1d1b17;
+  --border:        #26231f;
+  --border-alt:    #211e1b;
+  --border-sub:    #2d2a25;
+  --border-hover:  #3e3a34;
+  --border-foot:   #1c1a16;
+  --nav-bg:        rgba(14, 12, 9, 0.95);
+  --t1: #eaedf4;
+  --t2: #d6d9e1;
+  --t3: #c2c6cf;
+  --t4: #aeb3bd;
+  --t5: #9ca0aa;
+  --t6: #8a8e99;
+  --t7: #7a7e88;
+  --t8: #60636c;
+  --t9: #404249;
+  --accent: #6389ff;
+  --chip-bg: #1d1b17;
+  --dot-1: #7598ff;
+  --dot-2: #5b76c4;
+  --dot-3: #445688;
+}
+
+/* ── base ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  font-family: "IBM Plex Mono", monospace;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--t1);
+}
+
+/* Theme switch: every colour on the page cross-fades instead of snapping.
+   The class is only present for the length of the switch (see toggleTheme),
+   because a standing transition on * would also slow down every hover. */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color 300ms ease, border-color 300ms ease,
+              color 300ms ease, fill 300ms ease, stroke 300ms ease,
+              outline-color 300ms ease !important;
+  transition-delay: 0s !important;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+/* ── animations ───────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* on-load reveal: each line wipes in from the left, like a terminal printing
+   its output. Stagger with --d on the element. */
+@keyframes reveal-left {
+  from { opacity: 0; transform: translateX(-1.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+.cursor-blink { animation: blink 1s step-end infinite; }
+.reveal {
+  animation: reveal-left 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* The scroll cue's chevron: a drop, a smaller rebound, then a rest. The
+   per-keyframe easing is what sells it — falls accelerate, rises decelerate,
+   the way a dropped thing actually moves. */
+@keyframes nudge {
+  0%, 20%, 100% { transform: translateY(0);    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0); }
+  36%           { transform: translateY(10px); animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); }
+  52%           { transform: translateY(0);    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0); }
+  64%           { transform: translateY(5px);  animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); }
+  78%           { transform: translateY(0); }
+}
+
+.nudge { animation: nudge 2s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .cursor-blink, .nudge { animation: none; }
+  /* the smooth scrolling the nav and scroll cue trigger is motion too */
+  html { scroll-behavior: auto; }
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after { transition: none !important; }
+}
+
+/* The travelling monogram. On narrow screens the hero never shows the full
+   name, so the monogram is the wordmark from the start and stays opaque; at
+   md+ it fades in as the full name fades out. */
+.floating-mark { opacity: 1; }
+
+@media (min-width: 768px) {
+  .floating-mark { opacity: var(--mark-o, 0); }
+}
+
+/* ── scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track  { background: var(--bg); }
+::-webkit-scrollbar-thumb  { background: var(--border-alt); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--t8); }

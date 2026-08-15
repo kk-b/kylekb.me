@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="kk-b — Full Stack Developer" />
+    <title>kk-b</title>
+    <!-- prevent flash of wrong theme on load -->
+    <script>
+      try {
+        const t = localStorage.getItem('theme')
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark')
+        }
+      } catch (_) {}
+    </script>
+  </head>
+  <body>
+    <!-- Served in the static HTML so crawlers get the name without running JS.
+         Visually hidden: the hero shows it as ASCII art, which is only decorative
+         (the art is aria-hidden, so this heading is what gets announced). -->
+    <h1 class="sr-only">Kyle Khuong-Bui</h1>
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>
