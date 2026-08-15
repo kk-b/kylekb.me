@@ -1,11 +1,11 @@
 import { createSignal } from 'solid-js'
 
+/* Light is the default. The OS preference is deliberately not consulted —
+   only an explicit choice, remembered in localStorage, turns the site dark.
+   Must stay in step with the inline script in index.html. */
 function getInitial(): boolean {
   try {
-    const stored = localStorage.getItem('theme')
-    if (stored === 'dark') return true
-    if (stored === 'light') return false
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
+    return localStorage.getItem('theme') === 'dark'
   } catch {
     return false
   }
