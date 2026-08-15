@@ -23,9 +23,11 @@ jobs:
       # v5 runs on Node 24; v4 targeted the now-deprecated Node 20 runtime
       - uses: actions/setup-node@v5
         with:
-          # the Node the build runs on — 20 is end-of-life, and Vite 8 wants
-          # ^20.19.0 || >=22.12.0
-          node-version: '22'
+          # Matches the local Node/npm that generates package-lock.json. npm 10
+          # (bundled with Node 22) and npm 11 resolve bundled optional deps
+          # differently, so a lock written by npm 11 makes `npm ci` on npm 10
+          # fail with "Missing: @emnapi/core from lock file".
+          node-version: '24'
           cache: npm
 
       - run: npm ci
