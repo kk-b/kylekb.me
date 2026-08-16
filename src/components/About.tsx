@@ -49,7 +49,7 @@ const About: Component = () => {
                   I'm a Software Engineer at Capital One working on their AutoNavigator platform.
                 </span>{' '}
                 I'm a full-stack developer with a passion for building scalable and efficient systems.
-                I enjoy solving complex problems and learning. I love cooking, rock climbing, watching anime, and traveling in my free time. :&#125;
+                I enjoy solving complex problems and learning. I love cooking, climbing rocks, watching anime, and traveling in my free time. :&#125;
             </p>
           </div>
 

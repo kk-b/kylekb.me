@@ -8,8 +8,7 @@ const ROLES = [
   'UI/UX Enthusiast',
   'Cooking Enthusiast',
   'Traveler',
-  'Rock Climber',
-  'Foodie'
+  'Foodie',
 ]
 
 const FULL_NAME = artToPath(FULL_NAME_ART)
@@ -115,14 +114,7 @@ const Hero: Component = () => {
       {/* the name is the <h1> in index.html — served in the static HTML and
           visually hidden, so it is indexed without repeating the wordmark */}
 
-      <div
-        class="reveal flex items-center gap-2 text-base text-[var(--t5)] mb-10"
-        style={{ '--d': '220ms' }}
-      >
-        <span class="text-[var(--accent)] select-none">&gt;</span>
-        <span>{displayText()}</span>
-        <span class="inline-block w-[2px] h-[18px] bg-[var(--accent)] cursor-blink" />
-      </div>
+      
 
       <div class="reveal" style={{ '--d': '330ms' }}>
         <About />
